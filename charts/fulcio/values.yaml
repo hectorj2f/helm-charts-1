@@ -2,7 +2,21 @@ namespace:
   create: false
   name: fulcio-system
 config:
-  contents: {}
+  contents: {
+    "OIDCIssuers": {
+        "https://my-supervisor.demo.pinniped.dev": {
+      "IssuerURL": "https://my-supervisor.demo.pinniped.dev",
+      "ClientID": "pinniped-cli",
+      "Type": "email"
+    },
+    },
+    "MetaIssuers": {
+      "https://kubernetes.*.svc": {
+        "ClientID": "sigstore",
+        "Type": "kubernetes"
+      }
+    }
+  }
 server:
   replicaCount: 1
   name: server

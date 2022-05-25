@@ -1,6 +1,23 @@
 ---
 # Fulcio
 fulcio:
+  config:
+    contents: {
+      "OIDCIssuers": {
+       "https://my-supervisor.demo.pinniped.dev": {
+       "IssuerURL": "https://my-supervisor.demo.pinniped.dev",
+       "ClientID": "pinniped-cli",
+       "SubjectDomain": "https://dev-elnuuoy6.us.auth0.com",
+       "Type": "uri"
+      },
+      },
+      "MetaIssuers": {
+        "https://kubernetes.*.svc": {
+          "ClientID": "sigstore",
+          "Type": "kubernetes"
+        }
+      }
+    }
   enabled: true
   namespace:
     name: fulcio-system
@@ -12,6 +29,13 @@ fulcio:
     fullnameOverride: fulcio-createcerts
   ctlog:
     enabled: false
+  server:
+    image:
+      registry: hectorj2f
+      repository: fulcio-bd4d600f674b081a535a886a15cb8d9a
+      version: sha256:60626eaec9b3e026a67a892344ad94164055bdbbbc60f0d2e1863d4ebe192574
+    ingress:
+      hostname: fulcio.localhost
 # CTLog
 ctlog:
   enabled: true
@@ -38,6 +62,9 @@ rekor:
     fullnameOverride: rekor-redis
   trillian:
     enabled: false
+  server:
+    ingress:
+      hostname: rekor.localhost    
 # Trillian
 trillian:
   enabled: true
