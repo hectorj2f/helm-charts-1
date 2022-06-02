@@ -1,14 +1,37 @@
 ---
 # Fulcio
 fulcio:
+  enabled: true
+  namespace:
+    name: fulcio-system
+    create: true
+  forceNamespace: fulcio-system
+  server:
+    fullnameOverride: fulcio-server
+    image:
+      registry: dherbrich
+      repository: fulcio-bd4d600f674b081a535a886a15cb8d9a
+      version: sha256:aa3907c55089868042a4e5d944c2f9216dfcba35d4ce581b9b59f12a1a3d1e69
+
+    ingress:
+      # hostname: fulcio.tap.dehe.cfplatformeng.com
+
+      http:
+        enabled: true
+        hosts:
+        - host: fulcio.tap.dehe.cfplatformeng.com
+          path: /
+  createcerts:
+    fullnameOverride: fulcio-createcerts
+  ctlog:
+    enabled: false
   config:
     contents: {
       "OIDCIssuers": {
-       "https://my-supervisor.demo.pinniped.dev": {
-       "IssuerURL": "https://my-supervisor.demo.pinniped.dev",
+       "https://pinniped.tap.dehe.cfplatformeng.com": {
+       "IssuerURL": "https://pinniped.tap.dehe.cfplatformeng.com",
        "ClientID": "pinniped-cli",
-       "SubjectDomain": "https://dev-elnuuoy6.us.auth0.com",
-       "Type": "uri"
+       "Type": "email"
       },
       },
       "MetaIssuers": {
@@ -18,24 +41,6 @@ fulcio:
         }
       }
     }
-  enabled: true
-  namespace:
-    name: fulcio-system
-    create: true
-  forceNamespace: fulcio-system
-  server:
-    fullnameOverride: fulcio-server
-  createcerts:
-    fullnameOverride: fulcio-createcerts
-  ctlog:
-    enabled: false
-  server:
-    image:
-      registry: hectorj2f
-      repository: fulcio-bd4d600f674b081a535a886a15cb8d9a
-      version: sha256:60626eaec9b3e026a67a892344ad94164055bdbbbc60f0d2e1863d4ebe192574
-    ingress:
-      hostname: fulcio.localhost
 # CTLog
 ctlog:
   enabled: true
@@ -58,13 +63,15 @@ rekor:
   fullnameOverride: rekor
   server:
     fullnameOverride: rekor-server
+    ingress:
+      # hostname: rekor.tap.dehe.cfplatformeng.com
+      hosts:
+      - host: rekor.tap.dehe.cfplatformeng.com
+        path: /
   redis:
     fullnameOverride: rekor-redis
   trillian:
     enabled: false
-  server:
-    ingress:
-      hostname: rekor.localhost    
 # Trillian
 trillian:
   enabled: true
